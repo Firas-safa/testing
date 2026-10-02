@@ -6,13 +6,10 @@ import '../models/product.dart';
 import 'cart_page.dart';
 import 'rebuild_demo_page.dart';
 
-/// Width at or above which the page switches to the two-column layout.
 const _desktopBreakpoint = 1000.0;
 
-/// Max width of the single-column content on tablets.
 const _narrowMaxWidth = 640.0;
 
-/// Max width of the whole two-column layout on desktop.
 const _wideMaxWidth = 1200.0;
 
 class ProductShowPage extends StatefulWidget {
@@ -65,7 +62,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
     );
   }
 
-  /// Cart icon with a badge showing how many units are in the cart.
   Widget _buildCartButton({required bool circle}) {
     return ListenableBuilder(
       listenable: widget.cart,
@@ -93,7 +89,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
 
   void _toggleFavorite() => setState(() => _isFavorite = !_isFavorite);
 
-  // Temporary: Share opens the setState rebuild demo.
   void _openRebuildDemo() => Navigator.of(context).push(
         MaterialPageRoute(builder: (_) => const RebuildDemoPage()),
       );
@@ -108,12 +103,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
         : _buildNarrowLayout(theme);
   }
 
-  // ---------------------------------------------------------------------------
-  // Layouts
-  // ---------------------------------------------------------------------------
-
-  /// Phones and tablets: collapsing gallery header, single column of details
-  /// (capped at [_narrowMaxWidth]) and a sticky purchase bar.
   Widget _buildNarrowLayout(ThemeData theme) {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -138,8 +127,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
     );
   }
 
-  /// Desktop: gallery on the left, details on the right, each scrolling
-  /// independently, with the purchase controls inline.
   Widget _buildWideLayout(ThemeData theme) {
     return Scaffold(
       backgroundColor: theme.colorScheme.surface,
@@ -228,10 +215,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
       _buildPerks(theme),
     ];
   }
-
-  // ---------------------------------------------------------------------------
-  // Sections
-  // ---------------------------------------------------------------------------
 
   Widget _buildGallerySliver() {
     final color = product.colors[_colorIndex].color;
@@ -329,7 +312,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
   }
 
   Widget _buildPrice(ThemeData theme) {
-    // Wrap so the stock badge drops to its own line when space runs out.
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
       crossAxisAlignment: WrapCrossAlignment.center,
@@ -391,7 +373,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Four across normally; 2×2 on very narrow phones.
         final columns = constraints.maxWidth < 340 ? 2 : 4;
         final itemWidth =
             (constraints.maxWidth - spacing * (columns - 1)) / columns;
@@ -592,8 +573,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
     );
   }
 
-  /// Quantity stepper + add-to-cart button. Used in the sticky bottom bar on
-  /// narrow screens and inline in the details column on desktop.
   Widget _buildPurchaseRow(ThemeData theme) {
     final total = product.price * _quantity;
 
@@ -638,7 +617,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
               ),
             ),
             icon: const Icon(Icons.shopping_bag_outlined),
-            // Shrinks the label instead of overflowing on very narrow phones.
             label: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
@@ -676,10 +654,6 @@ class _ProductShowPageState extends State<ProductShowPage> {
   }
 }
 
-// -----------------------------------------------------------------------------
-// Gallery
-// -----------------------------------------------------------------------------
-
 class _ProductGallery extends StatefulWidget {
   const _ProductGallery({
     required this.color,
@@ -689,7 +663,6 @@ class _ProductGallery extends StatefulWidget {
     this.showControls = false,
   });
 
-  // Placeholder artwork; swap for Image.network / Image.asset.
   static const icons = [
     Icons.directions_run_rounded,
     Icons.hiking_rounded,
@@ -701,8 +674,6 @@ class _ProductGallery extends StatefulWidget {
   final ValueChanged<int> onIndexChanged;
   final int? discountPercent;
 
-  /// Square stage with arrow buttons and a thumbnail strip (desktop).
-  /// When false the gallery just fills its parent (mobile header).
   final bool showControls;
 
   @override
@@ -710,7 +681,6 @@ class _ProductGallery extends StatefulWidget {
 }
 
 class _ProductGalleryState extends State<_ProductGallery> {
-  // Starts on the current image so switching layouts keeps the position.
   late final _controller = PageController(initialPage: widget.index);
 
   int get _count => _ProductGallery.icons.length;
@@ -771,7 +741,6 @@ class _ProductGalleryState extends State<_ProductGallery> {
             ),
           ),
         ),
-        // Allow mouse/trackpad dragging so desktop users can swipe too.
         ScrollConfiguration(
           behavior: ScrollConfiguration.of(context).copyWith(
             dragDevices: PointerDeviceKind.values.toSet(),
@@ -890,11 +859,6 @@ class _ProductGalleryState extends State<_ProductGallery> {
   }
 }
 
-// -----------------------------------------------------------------------------
-// Small building blocks
-// -----------------------------------------------------------------------------
-
-/// Centers [child] horizontally and caps its width.
 class _Constrained extends StatelessWidget {
   const _Constrained({required this.maxWidth, required this.child});
 
@@ -905,7 +869,6 @@ class _Constrained extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.topCenter,
-      // Size to the child's height rather than filling the parent.
       heightFactor: 1,
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: maxWidth),
