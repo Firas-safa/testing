@@ -32,19 +32,26 @@ class _ProductShowPageState extends State<ProductShowPage> {
 
   Product get product => widget.product;
 
-  void _addToCart() {
+  (ProductColor, String)? _addSelectionToCart() {
     final messenger = ScaffoldMessenger.of(context);
     messenger.hideCurrentSnackBar();
     if (_sizeIndex == null) {
       messenger.showSnackBar(
         const SnackBar(content: Text('Please select a size first')),
       );
-      return;
+      return null;
     }
     final color = product.colors[_colorIndex];
     final size = product.sizes[_sizeIndex!];
     widget.cart.add(product, color, size, quantity: _quantity);
-    messenger.showSnackBar(
+    return (color, size);
+  }
+
+  void _addToCart() {
+    final added = _addSelectionToCart();
+    if (added == null) return;
+    final (color, size) = added;
+    ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           '$_quantity × ${product.name} '
@@ -53,6 +60,10 @@ class _ProductShowPageState extends State<ProductShowPage> {
         action: SnackBarAction(label: 'View cart', onPressed: _openCart),
       ),
     );
+  }
+
+  void _buyNow() {
+    if (_addSelectionToCart() != null) _openCart();
   }
 
   void _openCart() {
@@ -576,54 +587,75 @@ class _ProductShowPageState extends State<ProductShowPage> {
   Widget _buildPurchaseRow(ThemeData theme) {
     final total = product.price * _quantity;
 
-    return Row(
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color:
-                theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
-            borderRadius: BorderRadius.circular(14),
-          ),
-          child: Row(
-            children: [
-              IconButton(
-                tooltip: 'Decrease quantity',
-                icon: const Icon(Icons.remove),
-                onPressed:
-                    _quantity > 1 ? () => setState(() => _quantity--) : null,
-              ),
-              Text(
-                '$_quantity',
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
-              ),
-              IconButton(
-                tooltip: 'Increase quantity',
-                icon: const Icon(Icons.add),
-                onPressed: () => setState(() => _quantity++),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: FilledButton.icon(
-            onPressed: _addToCart,
-            style: FilledButton.styleFrom(
-              minimumSize: const Size.fromHeight(52),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              shape: RoundedRectangleBorder(
+        Row(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: theme.colorScheme.surfaceContainerHighest
+                    .withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(14),
               ),
-            ),
-            icon: const Icon(Icons.shopping_bag_outlined),
-            label: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                'Add to cart · \$${total.toStringAsFixed(2)}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
+              child: Row(
+                children: [
+                  IconButton(
+                    tooltip: 'Decrease quantity',
+                    icon: const Icon(Icons.remove),
+                    onPressed: _quantity > 1
+                        ? () => setState(() => _quantity--)
+                        : null,
+                  ),
+                  Text(
+                    '$_quantity',
+                    style: theme.textTheme.titleMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    tooltip: 'Increase quantity',
+                    icon: const Icon(Icons.add),
+                    onPressed: () => setState(() => _quantity++),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: FilledButton.icon(
+                onPressed: _addToCart,
+                style: FilledButton.styleFrom(
+                  minimumSize: const Size.fromHeight(52),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                icon: const Icon(Icons.shopping_bag_outlined),
+                label: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    'Add to cart · \$${total.toStringAsFixed(2)}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        OutlinedButton.icon(
+          onPressed: _buyNow,
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size.fromHeight(48),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14),
+            ),
+          ),
+          icon: const Icon(Icons.flash_on_rounded),
+          label: const Text(
+            'Buy now',
+            style: TextStyle(fontWeight: FontWeight.bold),
           ),
         ),
       ],
