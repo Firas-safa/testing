@@ -57,9 +57,8 @@ class _ProductShowPageState extends State<ProductShowPage> {
 
   void _openCart() {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => CartPage(cart: widget.cart)),
-    );
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (_) => CartPage(cart: widget.cart)));
   }
 
   Widget _buildCartButton({required bool circle}) {
@@ -89,9 +88,9 @@ class _ProductShowPageState extends State<ProductShowPage> {
 
   void _toggleFavorite() => setState(() => _isFavorite = !_isFavorite);
 
-  void _openRebuildDemo() => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => const RebuildDemoPage()),
-      );
+  void _openRebuildDemo() =>
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (_) => const RebuildDemoPage()));
 
   @override
   Widget build(BuildContext context) {
@@ -288,16 +287,17 @@ class _ProductShowPageState extends State<ProductShowPage> {
                 final icon = product.rating >= i + 1
                     ? Icons.star_rounded
                     : product.rating >= i + 0.5
-                        ? Icons.star_half_rounded
-                        : Icons.star_outline_rounded;
+                    ? Icons.star_half_rounded
+                    : Icons.star_outline_rounded;
                 return Icon(icon, size: 20, color: Colors.amber);
               }),
             ),
             const SizedBox(width: 2),
             Text(
               product.rating.toStringAsFixed(1),
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.w600),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
             Text(
               '(${product.reviewCount} reviews)',
@@ -386,16 +386,18 @@ class _ProductShowPageState extends State<ProductShowPage> {
                 width: itemWidth,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest
-                      .withValues(alpha: 0.5),
+                  color: theme.colorScheme.surfaceContainerHighest.withValues(
+                    alpha: 0.5,
+                  ),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Column(
                   children: [
                     Text(
                       entry.value,
-                      style: theme.textTheme.titleSmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -417,10 +419,7 @@ class _ProductShowPageState extends State<ProductShowPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _SectionTitle(
-          'Color',
-          trailing: product.colors[_colorIndex].name,
-        ),
+        _SectionTitle('Color', trailing: product.colors[_colorIndex].name),
         const SizedBox(height: 12),
         Wrap(
           spacing: 12,
@@ -448,8 +447,11 @@ class _ProductShowPageState extends State<ProductShowPage> {
                       radius: 16,
                       backgroundColor: c,
                       child: selected
-                          ? const Icon(Icons.check,
-                              size: 16, color: Colors.white)
+                          ? const Icon(
+                              Icons.check,
+                              size: 16,
+                              color: Colors.white,
+                            )
                           : null,
                     ),
                   ),
@@ -580,8 +582,9 @@ class _ProductShowPageState extends State<ProductShowPage> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color:
-                theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.6),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(
+              alpha: 0.6,
+            ),
             borderRadius: BorderRadius.circular(14),
           ),
           child: Row(
@@ -589,13 +592,15 @@ class _ProductShowPageState extends State<ProductShowPage> {
               IconButton(
                 tooltip: 'Decrease quantity',
                 icon: const Icon(Icons.remove),
-                onPressed:
-                    _quantity > 1 ? () => setState(() => _quantity--) : null,
+                onPressed: _quantity > 1
+                    ? () => setState(() => _quantity--)
+                    : null,
               ),
               Text(
                 '$_quantity',
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               IconButton(
                 tooltip: 'Increase quantity',
@@ -692,10 +697,10 @@ class _ProductGalleryState extends State<_ProductGallery> {
   }
 
   void _goTo(int i) => _controller.animateToPage(
-        i,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOutCubic,
-      );
+    i,
+    duration: const Duration(milliseconds: 300),
+    curve: Curves.easeOutCubic,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -742,9 +747,8 @@ class _ProductGalleryState extends State<_ProductGallery> {
           ),
         ),
         ScrollConfiguration(
-          behavior: ScrollConfiguration.of(context).copyWith(
-            dragDevices: PointerDeviceKind.values.toSet(),
-          ),
+          behavior: ScrollConfiguration.of(context)
+              .copyWith(dragDevices: PointerDeviceKind.values.toSet()),
           child: PageView.builder(
             controller: _controller,
             itemCount: _count,
@@ -894,8 +898,9 @@ class _SectionTitle extends StatelessWidget {
           child: Text(
             title,
             overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.titleMedium
-                ?.copyWith(fontWeight: FontWeight.bold),
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
         const SizedBox(width: 12),
