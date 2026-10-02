@@ -3,6 +3,10 @@ name: release-locks
 description: Release your FEATURES.md file locks for a branch after it is pushed, so teammates can edit those files. Use when the user says "release my locks", "unlock my files", or that they finished/pushed a feature and others can take over.
 ---
 
+Locks are released automatically after Claude runs `git push`
+(`.claude/hooks/release-after-push.sh`). Use this skill when the user pushed
+from their own terminal, or to release a different branch.
+
 Run the release script from the project root, passing the branch name if the
 user gave one (otherwise it uses the current branch):
 
