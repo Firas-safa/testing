@@ -7,8 +7,20 @@
           {
             "type": "command",
             "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-lock.sh\"",
-            "timeout": 10,
+            "timeout": 60,
             "statusMessage": "Checking FEATURES.md locks..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/after-plan.sh\"",
+            "timeout": 10
           }
         ]
       }
